@@ -1,0 +1,39 @@
+{
+  "manifest_version": 2,
+  "name": "NightWatchScriptGenerator",
+  "version": "0.5",
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "http://*/*",
+    "https://*/*",
+    "notifications",
+    "storage",
+    "clipboardRead",
+    "clipboardWrite"
+  ],
+  "description": "NightWatchScriptGenerator",
+  "browser_action": {
+    "default_popup": "popup.html",
+    "default-title": "SelectAll"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*"
+      ],
+      "js": [
+        "jquery.js",
+        "content.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    "icon.png"
+  ]
+}

@@ -1,0 +1,58 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+<head>
+    <title>Getting Started Extension's Popup</title>
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            width: 280px;
+            margin: 0 auto;
+            background-color: rgb(255, 255, 255);
+        }
+
+        p {
+            font-family: Helvetica;
+            font-weight: 200;
+            color: black;
+        }
+
+        .holder {
+            margin: 20px 20px 20px 20px;
+            text-align: center;
+        }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    <script src="jquery.js"></script>
+    <script src="popup.js"></script>
+</head>
+<body>
+<div class="holder">
+    <label>
+        <p align=center style="font-size:15px;">NightWatchScriptGenerator</p>
+        <br>
+    </label>
+    <label>
+        <button type="button" class="btn btn-success" id="manual">Manual</button>
+        <button type="button" class="btn btn-success" id="record">Auto</button>
+        <p id="note"></p>
+    </label>
+    <!--<p>click</p>-->
+    <!--<p>set value</p>-->
+    <!--<p>open window</p>-->
+    <!--<input placeholder="css selector"/>-->
+    <textarea id="script">script generated</textarea>
+</div>
+</body>
+</html>
+
