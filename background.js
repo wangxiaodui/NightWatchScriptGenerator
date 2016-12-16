@@ -71,8 +71,9 @@ chrome.runtime.onConnect.addListener(function(port) {
                 case 'click':
                     outputScript += getExpect(cssSelector) + getClick(cssSelector);
                     break;
-                case 'switchWindow':
-                    outputScript += getSwitchWindow();
+                // case 'switchWindow':
+                //     outputScript += getSwitchWindow();
+                //     break;
                 default:
                     break;
             }
@@ -120,18 +121,18 @@ function getClick(cssSelector) {
 
 
 
-function getSwitchWindow() {
-    windowNum++;
-    var script;
-
-        windowNum++;
-        var state1 = "var newWindow;\n";
-        var state2 = "this.verify.equal(result.value.length, " + windowNum + ", ' There should be " + windowNum + " windows open');\n";
-        var state3 = "newWindow = result.value[" + (windowNum-1) + "];\n";
-        var state4 = "this.switchWindow(newWindow);\n";
-        var functionBody = state1 + state2 + state3 + state4;
-
-    script= 'browser.windowHandles(function(result) \n{'+ functionBody + '}).pause(1000);\n';
-
-    return script;
-}
+// function getSwitchWindow() {
+//     windowNum++;
+//     var script;
+//
+//         windowNum++;
+//         var state1 = "var newWindow;\n";
+//         var state2 = "this.verify.equal(result.value.length, " + windowNum + ", ' There should be " + windowNum + " windows open');\n";
+//         var state3 = "newWindow = result.value[" + (windowNum-1) + "];\n";
+//         var state4 = "this.switchWindow(newWindow);\n";
+//         var functionBody = state1 + state2 + state3 + state4;
+//
+//     script= 'browser.windowHandles(function(result) \n{'+ functionBody + '}).pause(1000);\n';
+//
+//     return script;
+// }

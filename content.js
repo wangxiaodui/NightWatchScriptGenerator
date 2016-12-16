@@ -17,31 +17,37 @@ $('input[type=text]').blur(function (e) {
 
 $('input[type=submit]').click(function(e) {
     var self = $(this);
-    afterClick(self);
+    afterClick('input', self);
 })
 
 $('button').click(function(e) {
     var self = $(this);
-    afterClick(self);
+    afterClick('button', self);
 })
 
-function afterClick(self) {
+$('a').click(function(e) {
+    var self = $(this);
+    afterClick('a', self);
+})
+
+function afterClick(ele, self) {
     var msg = {
         action: 'click',
-        cssSelector: genCssSelector('button', self)
+        cssSelector: genCssSelector(ele, self)
     }
     port.postMessage(msg);
-    if(targetBlank())
-        port.postMessage({action: 'switchWindow'})
+    // if(targetBlank())
+    //     port.postMessage({action: 'switchWindow'})
 }
 function genCssSelector(ele, self) {
     var id = self.attr('id') ? '[id=' + self.attr('id') +']' : '';
     var cls = self.attr('class') ? '[class=' + self.attr('class') + ']': '';
     var type = self.attr('type') ? '[type=' + self.attr('type') +']' : '';
-    return ele + type + id + cls;
+    var href = self.attr('href') ? '[href=' + self.attr('href') +']' : '';
+    return ele + type + id + cls + href;
 }
 
-function targetBlank(self) {
-    return (self.attr('target') == '_blank');
-}
-
+// function targetBlank(self) {
+//     return (self.attr('target') == '_blank');
+// }
+//
