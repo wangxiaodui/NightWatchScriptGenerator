@@ -35,7 +35,7 @@ chrome.runtime.onMessage.addListener(
                 sendResponse({msg: outputScript})
                 break;
             case 'get-status':
-                sendResponse({msg: isRecording});
+                sendResponse({isRecording: isRecording});
                 break;
             default:
                 break;

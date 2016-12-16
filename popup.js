@@ -24,6 +24,17 @@ window.onload = function() {
         }
 
     })
+
+    $('#manual').on('click', function() {
+        if($('.manual-menu').css('display') == 'none')
+            displayManualMenu();
+        else
+            hideManualMenu();
+    })
+
+    $('#use-expectation').on('click', function() {
+        toggleExpectation();
+    })
 }
 
 /**
@@ -32,7 +43,7 @@ window.onload = function() {
 function getStatus() {
     chrome.runtime.sendMessage({command: "get-status"}, function (response){
         // is recording
-        if(response.msg) {
+        if(response.isRecording) {
             displayStop();
         }
     });
@@ -50,4 +61,22 @@ function displayAuto() {
     record.text('Auto');
     record.removeClass('btn-danger');
     record.addClass('btn-success');
+}
+
+
+function displayManualMenu() {
+    $('.manual-menu').css('display', 'inherit');
+}
+
+function hideManualMenu() {
+    $('.manual-menu').css('display', 'none');
+}
+
+function toggleExpectation() {
+    var expectationForm = $('.expectation-form');
+    if(expectationForm.css('display') == 'none')
+        expectationForm.css('display', 'inherit');
+    else
+        expectationForm.css('display', 'none');
+
 }

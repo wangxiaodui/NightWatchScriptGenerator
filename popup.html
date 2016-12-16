@@ -8,25 +8,7 @@
 <head>
     <title>Getting Started Extension's Popup</title>
     <link href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            width: 280px;
-            margin: 0 auto;
-            background-color: rgb(255, 255, 255);
-        }
-
-        p {
-            font-family: Helvetica;
-            font-weight: 200;
-            color: black;
-        }
-
-        .holder {
-            margin: 20px 20px 20px 20px;
-            text-align: center;
-        }
-    </style>
-
+    <link href="popup.css" rel="stylesheet">
     <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
@@ -47,11 +29,43 @@
         <button type="button" class="btn btn-success" id="record">Auto</button>
         <p id="note"></p>
     </label>
-    <!--<p>click</p>-->
-    <!--<p>set value</p>-->
-    <!--<p>open window</p>-->
-    <!--<input placeholder="css selector"/>-->
-    <textarea id="script">script generated</textarea>
+    <div class="manual-menu" style="display: none;">
+        <div>
+            <p class="center">Action</p>
+            <input placeholder="CssSelector" class="form-control">
+            <select class="selectpicker">
+                <option>SetValue</option>
+                <option>Click</option>
+            </select>
+        </div>
+        <div>
+            <p class="center">Expectation <a id="use-expectation">use</a></p>
+            <div class="expectation-form" style="display: none">
+                <input placeholder="CssSelector" class="form-control">
+                <select class="selectpicker">
+                    <option>have</option>
+                    <option>not have</option>
+                </select>
+                <select class="selectpicker">
+                    <option>attribute</option>
+                    <option>css</option>
+                    <option>text</option>
+                </select>
+                <select class="selectpicker">
+                    <option>equals</option>
+                    <option>contains</option>
+                </select>
+                <input placeholder="Value" class="form-control">
+            </div>
+        </div>
+        <div class="center">
+            <button id="step-finish" class="btn btn-primary">FinishStep</button>
+            <button id="script-finish" class="btn btn-primary">FinishScript</button>
+        </div>
+    </div>
+    <div class="script-display">
+        <textarea id="script" class="form-control" readonly>Script Generated</textarea>
+    </div>
 </div>
 </body>
 </html>
