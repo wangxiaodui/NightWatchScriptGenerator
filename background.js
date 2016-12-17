@@ -1,12 +1,17 @@
 var outputScript = '';
-var isRecording = false;
+var recordingStatus = {
+    isRecordingAuto: false,
+    isRecordingManual: false
+}
+// var isRecordingAuto = false;
+// var isRecordingManual = false;
 var windowNum = 0;
 //handle popup.js event
 chrome.runtime.onMessage.addListener(
     /**
      *
      * @param request JSON
-     *  command: 'manual-start', 'manual-finish', 'auto-start', 'auto-finish'
+     *  command: 'manual-start', 'manual-finish', 'manual-step', 'auto-start', 'auto-finish'
      *  cssSelector: to identify one element
      *  action: 'click' | 'focus' | 'setValue'
      *
@@ -18,24 +23,27 @@ chrome.runtime.onMessage.addListener(
     {
         switch(request.command) {
             case 'manual-start':
+                startRecord(false, true);
+                sendResponse({msg: 'test record running'})
+                break;
+            case 'manual-step':
                 break;
             case 'manual-finish':
+                endRecord();
+                sendResponse({msg: outputScript});
                 break;
             case 'auto-start':
-                getHeaderScript();
-                isRecording = true;
-                windowNum = 1;
+                startRecord(true, false);
                 sendResponse({msg: 'test record running'})
                 break;
             case 'auto-finish':
                 // notify to display generated script
                 // and copy to clipboard
-                isRecording = false;
-                outputScript += getEndingScript();
+                endRecord();
                 sendResponse({msg: outputScript})
                 break;
             case 'get-status':
-                sendResponse({isRecording: isRecording});
+                sendResponse({recordingStatus: recordingStatus});
                 break;
             default:
                 break;
@@ -63,7 +71,7 @@ chrome.runtime.onConnect.addListener(function(port) {
      */
     port.onMessage.addListener(function(msg) {
         var cssSelector = msg.cssSelector;
-        if(isRecording) {
+        if(recordingStatus.isRecordingAuto) {
             switch (msg.action) {
                 case 'setValue':
                     outputScript += getExpect(cssSelector) + getSetValue(cssSelector, msg.val);
@@ -71,12 +79,15 @@ chrome.runtime.onConnect.addListener(function(port) {
                 case 'click':
                     outputScript += getExpect(cssSelector) + getClick(cssSelector);
                     break;
-                // case 'switchWindow':
-                //     outputScript += getSwitchWindow();
-                //     break;
+                case 'switchWindow':
+                    outputScript += getSwitchWindow();
+                    break;
                 default:
                     break;
             }
+        }
+        if(recordingStatus.isRecordingManual) {
+
         }
     });
 });
@@ -120,19 +131,38 @@ function getClick(cssSelector) {
 }
 
 
+function getSwitchWindow() {
+    windowNum++;
+    var script;
 
-// function getSwitchWindow() {
-//     windowNum++;
-//     var script;
-//
-//         windowNum++;
-//         var state1 = "var newWindow;\n";
-//         var state2 = "this.verify.equal(result.value.length, " + windowNum + ", ' There should be " + windowNum + " windows open');\n";
-//         var state3 = "newWindow = result.value[" + (windowNum-1) + "];\n";
-//         var state4 = "this.switchWindow(newWindow);\n";
-//         var functionBody = state1 + state2 + state3 + state4;
-//
-//     script= 'browser.windowHandles(function(result) \n{'+ functionBody + '}).pause(1000);\n';
-//
-//     return script;
-// }
+        windowNum++;
+        var state1 = 'var newWindow;\n';
+        var state2 = 'this.verify.equal(result.value.length, ' + windowNum + ',  There should be ' + windowNum + ' windows open);\n';
+        var state3 = 'newWindow = result.value[' + (windowNum-1) + '];\n';
+        var state4 = 'this.switchWindow(newWindow);\n';
+        var functionBody = state1 + state2 + state3 + state4;
+
+    script= 'browser.windowHandles(function(result) \n{'+ functionBody + '}).pause(1000);\n';
+
+    return script;
+}
+
+
+/**
+ * end of script generate related functions
+ */
+
+
+
+function startRecord(auto, manual) {
+    windowNum = 1;
+    getHeaderScript();
+    recordingStatus.isRecordingAuto = auto;
+    recordingStatus.isRecordingManual = manual;
+}
+
+function endRecord() {
+    recordingStatus.isRecordingAuto = false;
+    recordingStatus.isRecordingManual = false;
+    outputScript += getEndingScript();
+}

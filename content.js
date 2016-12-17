@@ -36,9 +36,10 @@ function afterClick(ele, self) {
         cssSelector: genCssSelector(ele, self)
     }
     port.postMessage(msg);
-    // if(targetBlank())
-    //     port.postMessage({action: 'switchWindow'})
+    if(targetBlank())
+        port.postMessage({action: 'switchWindow'});
 }
+
 function genCssSelector(ele, self) {
     var id = self.attr('id') ? '[id=' + self.attr('id') +']' : '';
     var cls = self.attr('class') ? '[class=' + self.attr('class') + ']': '';
@@ -47,7 +48,7 @@ function genCssSelector(ele, self) {
     return ele + type + id + cls + href;
 }
 
-// function targetBlank(self) {
-//     return (self.attr('target') == '_blank');
-// }
-//
+function targetBlank(self) {
+    return (self.attr('target') == '_blank');
+}
+

@@ -20,20 +20,20 @@
 </head>
 <body>
 <div class="holder">
-    <label>
-        <p align=center style="font-size:15px;">NightWatchScriptGenerator</p>
-        <br>
-    </label>
+    <div>
+        <label>
+            <p align=center style="font-size:15px;">NightWatchScriptGenerator</p>
+        </label>
+    </div>
     <label>
         <button type="button" class="btn btn-success" id="manual">Manual</button>
-        <button type="button" class="btn btn-success" id="record">Auto</button>
-        <p id="note"></p>
+        <button type="button" class="btn btn-success" id="auto">Auto</button>
     </label>
     <div class="manual-menu" style="display: none;">
         <div>
             <p class="center">Action</p>
-            <input placeholder="CssSelector" class="form-control">
-            <select class="selectpicker">
+            <input placeholder="CssSelector" class="form-control" id="target-css-selector">
+            <select class="selectpicker" id="target-action">
                 <option>SetValue</option>
                 <option>Click</option>
             </select>
@@ -41,30 +41,33 @@
         <div>
             <p class="center">Expectation <a id="use-expectation">use</a></p>
             <div class="expectation-form" style="display: none">
-                <input placeholder="CssSelector" class="form-control">
-                <select class="selectpicker">
+                <input placeholder="CssSelector" class="form-control" id="expect-css-selector">
+                <select class="selectpicker" id="expect-phrase-one">
                     <option>have</option>
                     <option>not have</option>
                 </select>
-                <select class="selectpicker">
+                <select class="selectpicker" id="expect-phrase-two">
                     <option>attribute</option>
                     <option>css</option>
                     <option>text</option>
                 </select>
-                <select class="selectpicker">
+                <select class="selectpicker" id="expect-phrase-three">
                     <option>equals</option>
                     <option>contains</option>
                 </select>
-                <input placeholder="Value" class="form-control">
+                <input placeholder="Value" class="form-control" id="expect-value">
             </div>
         </div>
         <div class="center">
             <button id="step-finish" class="btn btn-primary">FinishStep</button>
-            <button id="script-finish" class="btn btn-primary">FinishScript</button>
         </div>
     </div>
-    <div class="script-display">
-        <textarea id="script" class="form-control" readonly>Script Generated</textarea>
+    <div>
+        <p id="note" style="display: none"></p>
+    </div>
+    <div class="script-display" style="display: none;">
+        <p>Script Generated</p>
+        <textarea id="script" class="form-control" readonly></textarea>
     </div>
 </div>
 </body>
