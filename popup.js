@@ -64,20 +64,25 @@ window.onload = function() {
         var isUsingExpectation = ($('.expectation-form').css('display') === 'inherit');
         var targetCssSelector = $('#target-css-selector').val();
         var expectCssSelector = $('#expect-css-selector').val();
-        var expectValue = $('#expect-value').val();
+        var expectPropertyValue = $('#expect-property-value');
 
-        if(isManualMenuFormValid(isUsingExpectation, targetCssSelector, expectCssSelector)) {
+        if(isManualMenuFormValid(isUsingExpectation, targetCssSelector, expectCssSelector, expectPropertyValue)) {
             var msg = {
                 command: 'manual-step',
                 data: {
                     isUsingExpectation: isUsingExpectation,
+                    isUsingExpectProperty: true,
+                    isUsingExpectEquation: true,
                     targetCssSelector: targetCssSelector,
+                    targetValue: $('#target-value').val(),
                     expectCssSelector: expectCssSelector,
-                    expectValue: expectValue,
+                    expectPropertyValue: expectPropertyValue,
+                    expectEquationValue: $('#expect-equation-value').val(),
                     targetAction: $('#target-action').val(),
-                    expectPhraseOne: $('#expect-phrase-one').val(),
-                    expectPhraseTwo: $('#expect-phrase-two').val(),
-                    expectPhraseThree: $('#expect-phrase-three').val()
+                    expectPresent: $('#expect-present').val(),
+                    expectHave: $('#expect-have').val(),
+                    expectProperty: $('#expect-property').val(),
+                    expectEquation: $('#expect-equation').val()
                 }
             }
             chrome.runtime.sendMessage(msg, function(res) {
@@ -165,12 +170,12 @@ function clear(which) {
     hideScript();
 }
 
-function isManualMenuFormValid(isUsingExpectation, targetCssSelector, expectCssSelector) {
+function isManualMenuFormValid(isUsingExpectation, targetCssSelector, expectCssSelector, expectPropertyValue) {
     if(!isUsingExpectation) {
         if(targetCssSelector != '')
             return true;
     } else { // using expectation
-        if(targetCssSelector != '' && expectCssSelector != '')
+        if(targetCssSelector != '' && expectCssSelector != '' && expectPropertyValue != '')
             return true;
     }
     return false;

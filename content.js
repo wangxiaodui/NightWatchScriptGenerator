@@ -36,19 +36,28 @@ function afterClick(ele, self) {
         cssSelector: genCssSelector(ele, self)
     }
     port.postMessage(msg);
-    if(targetBlank())
-        port.postMessage({action: 'switchWindow'});
+    // if(targetBlank())
+    //     port.postMessage({action: 'switchWindow'});
 }
 
 function genCssSelector(ele, self) {
-    var id = self.attr('id') ? '[id=' + self.attr('id') +']' : '';
-    var cls = self.attr('class') ? '[class=' + self.attr('class') + ']': '';
-    var type = self.attr('type') ? '[type=' + self.attr('type') +']' : '';
-    var href = self.attr('href') ? '[href=' + self.attr('href') +']' : '';
-    return ele + type + id + cls + href;
+    // return  {
+    //     ele: ele,
+    //     id: self.attr('id') ? self.attr('id') : '',
+    //     cls: self.attr('class') ?  self.attr('class') : '',
+    //     type: self.attr('type') ? self.attr('type') : '',
+    //     href: self.attr('href') ? self.attr('href') : '',
+    //     target: self.attr('target') == '_blank' ? '_blank' : ''
+    // }
+    var id = self.attr('id') != '' ? '[id=' + self.attr('id') + ']' : '';
+    var cls = self.attr('class') != '' ? '[class=' + self.attr('class') + ']' : '';
+    var type = self.attr('type') != '' ? '[type=' + self.attr('type') + ']' : '';
+    var href = self.attr('href') != '' ? '[href=' + self.attr('href') + ']' : '';
+    var target = self.attr('target') != '' ? '[target=' + self.attr('target') + ']' : '';
+    return ele + id + cls + type + href + target;
 }
 
-function targetBlank(self) {
-    return (self.attr('target') == '_blank');
-}
-
+// function targetBlank(self) {
+//     return (self.attr('target') == '_blank');
+// }
+//

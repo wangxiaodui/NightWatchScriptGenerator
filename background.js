@@ -27,6 +27,9 @@ chrome.runtime.onMessage.addListener(
                 sendResponse({msg: 'test record running'})
                 break;
             case 'manual-step':
+                var data = request.data;
+                outputScript += getManualStep(data);
+                sendResponse({msg: outputScript});
                 break;
             case 'manual-finish':
                 endRecord();
@@ -79,9 +82,6 @@ chrome.runtime.onConnect.addListener(function(port) {
                 case 'click':
                     outputScript += getExpect(cssSelector) + getClick(cssSelector);
                     break;
-                case 'switchWindow':
-                    outputScript += getSwitchWindow();
-                    break;
                 default:
                     break;
             }
@@ -119,7 +119,7 @@ function getEndingScript() {
     return 'browser.pause(5000).end();\n' + '}\n};';
 }
 function getExpect(cssSelector) {
-    return 'browser.expect.element(\''+cssSelector+'\').to.be.present.before(1000);\n';
+    return 'browser.expect.element(\''+ cssSelector +'\').to.be.present.before(1000);\n';
 }
 
 function getSetValue(cssSelector, val) {
@@ -127,7 +127,11 @@ function getSetValue(cssSelector, val) {
 }
 
 function getClick(cssSelector) {
-    return 'browser.click(\'' + cssSelector + '\');\n';
+    var result = 'browser.click(\'' + cssSelector + '\');\n';
+    if (cssSelector.indexOf('[target=_blank]') != -1) {
+        result += getSwitchWindow();
+    }
+    return result;
 }
 
 
@@ -147,7 +151,144 @@ function getSwitchWindow() {
     return script;
 }
 
+// function getCssSelectorStr(cssSelector) {
+//     var ele = cssSelector.ele;
+//     var id = cssSelector.id != '' ? '[id=' + cssSelector.id + ']' : '';
+//     var cls = cssSelector.cls != '' ? '[class=' + cssSelector.cls + ']' : '';
+//     var type = cssSelector.type != '' ? '[type=' + cssSelector.type + ']' : '';
+//     var href = cssSelector.href != '' ? '[href=' + cssSelector.href + ']' : '';
+//     var target = cssSelector.target != '' ? '[target=' + cssSelector.target + ']' : '';
+//     return ele + id + cls + type + href + target;
+// }
+/**
+ * generate action & expect statement
+ * check out nightwatch api for more
+ *
+ * action format
+ * browser.element('cssSelector').
+ * expect possible format:
+ *
+ * 0.browser.expect.element('cssSelector').to.(not.)be.present.before(1000);
+ *
+ *
+ * 1.browser.expect.element('cssSelector').text.
+ *  to.contain
+ *  to.not.contain
+ *  to.equal
+ *  to.not.equal
+ *
+ * 2.browser.expect.element('cssSelector').to.have.value.
+ *  which.equals('someValue')
+ *  which.not.equals('someValue')
+ *  which.contains('someValue')
+ *  which.not.contains('someValue')
+ *
+ * 3.browser.expect.element('cssSelector').to.(not).have.css('cssProperty').
+ *  which.equals('somevalue')
+ *  which.not.equals('someValue')
+ *  which.contains('someValue')
+ *  which.not.contains('someValue')
+ *
+ *  4.browser.expect.element('cssSelector').to.have.attribute('someAttribute').
+ *  which.equals('someValue')
+ *  which.not.equals('someValue')
+ *  which.contains('someValue')
+ *  which.not.contains('someValue')
+ *
+ *
+ * @param data
+ */
+function getManualStep(data) {
+    var action;
+    var expect;
+    switch (data.targetAction) {
+        case 0: // set value
+            action = getSetValue(data.targetCssSelector, data.targetValue);
+            break;
+        case 1: // click
+            action = getClick(data.targetCssSelector);
+            break;
+    }
+    if(data.isUsingExpectation) {
+        switch (data.expectPresent) {
+            case 0:
+                expect = 'browser.expect.element(' +data.expectCssSelector + ').to.be.present.before(1000);\n'
+                break;
+            case 1:
+                expect = 'browser.expect.element(' +data.expectCssSelector + ').not.to.be.present.before(1000);\n'
+                break;
+        }
+        if(data.isUsingExpectProperty) {
+            switch (data.expectProperty) {
+                case 0 || 1: // attribute, css
+                    expect += getHaveProperty(data);
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(data.isUsingExpectEquation) {
+            expect += getEquation(data);
+        }
 
+    } else {
+        expect = '';
+    }
+    return action + expect;
+}
+
+function getHaveProperty(data) {
+    var property;
+    switch (data.expectProperty) {
+        case 0:
+            property = 'attribute(' + data.expectPropertyValue + ')';
+            break;
+        case 1:
+            property = 'css(' + data.expectPropertyValue + ')';
+            break;
+        default:
+            break;
+    }
+    return 'browser.expect.element(' + data.expectCssSelector + ').to.' + (data.expectHave == 0 ? 'have' : 'not.have.')
+    + property + ';\n';
+}
+
+function getEquation(data) {
+    var result = 'browser.expect.element(' +data.expectCssSelector + ').';
+    switch (data.expectProperty) {
+        case 0 || 1:
+            result += 'to.have.' + data.expectProperty == 0 ? 'attribute' : 'css'
+            + '(' + data.expectPropertyValue + ').which.';
+            break;
+        case 2:
+            result += 'to.have.value.which.';
+            break;
+        case 3:
+            result += 'text.to.';
+            break;
+        default:
+            break;
+    }
+    var equation = '';
+    switch (data.expectEquation) {
+        case 0: // equals
+            equation = (data.expectProperty == 3 ? 'equal' : 'equals');
+            break;
+        case 1: // contains
+            equation = (data.expectProperty == 3 ? 'contain' : 'contains');
+            break;
+        case 2:  // not equals
+            equation = (data.expectProperty == 3 ? 'not.equal' : 'not.equals');
+            break;
+        case 3: // not contains
+            equation = (data.expectProperty == 3 ? 'not.contain' : 'not.contains');
+            break;
+        default:
+            break;
+    }
+    result += equation + '(' + data.expectEquationValue + ');\n';
+    return result;
+}
 /**
  * end of script generate related functions
  */
@@ -166,3 +307,4 @@ function endRecord() {
     recordingStatus.isRecordingManual = false;
     outputScript += getEndingScript();
 }
+
