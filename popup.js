@@ -52,12 +52,17 @@ window.onload = function() {
                 displayScript(res);
             });
         }
-        checkManualMenu();
+        toggleDisplay( $('.manual-menu'));
 
     })
 
     $('#use-expectation').on('click', function() {
-        toggleExpectation();
+        var ele = $('.expectation-form');
+        toggleDisplay(ele);
+        if($(this).text() == 'Use')
+            $(this).text('Close')
+        else
+            $(this).text('Use')
     })
 
     $('#step-finish').on('click', function() {
@@ -71,8 +76,8 @@ window.onload = function() {
                 command: 'manual-step',
                 data: {
                     isUsingExpectation: isUsingExpectation,
-                    isUsingExpectProperty: true,
-                    isUsingExpectEquation: true,
+                    isUsingExpectProperty: $('#expect-property-wrap').css('visibility') == 'inherit',
+                    isUsingExpectEquation: $('#expect-equation-wrap').css('visibility') == 'inherit',
                     targetCssSelector: targetCssSelector,
                     targetValue: $('#target-value').val(),
                     expectCssSelector: expectCssSelector,
@@ -97,6 +102,27 @@ window.onload = function() {
         }
 
     })
+
+    $('#expect-property-use').on('click', function() {
+        if($(this).text() == 'Don\'t use') {
+            $(this).text('use');
+            $('#expect-property-wrap').css('display', 'none');
+        } else {
+            $(this).text('Don\'t use');
+            $('#expect-property-wrap').css('display', 'inherit');
+        }
+
+    })
+
+    $('#expect-equation-use').on('click', function() {
+        if($(this).text() == 'Don\'t use') {
+            $(this).text('use');
+            $('#expect-equation-wrap').css('display', 'none');
+        } else {
+            $(this).text('Don\'t use');
+            $('#expect-equation-wrap').css('display', 'inherit');
+        }
+    })
 }
 
 /**
@@ -109,7 +135,7 @@ function getStatus() {
             displayFinish($('#auto'));
         else if(response.recordingStatus.isRecordingManual && !response.recordingStatus.isRecordingAuto) {
             displayFinish($('#manual'));
-            checkManualMenu();
+            toggleDisplay( $('.manual-menu'));
         }
     });
 }
@@ -137,22 +163,14 @@ function hideScript() {
     $('.script-display').css('display', 'none');
 }
 
-function checkManualMenu() {
-    var manualMenu = $('.manual-menu');
 
-    if(manualMenu.css('display') == 'none')
-        manualMenu.css('display', 'inherit');
+function toggleDisplay(ele, text) {
+    if(ele.css('display') == 'none')
+        ele.css('display', 'inherit');
     else
-        manualMenu.css('display', 'none');
-
-}
-function toggleExpectation() {
-    var expectationForm = $('.expectation-form');
-    if(expectationForm.css('display') == 'none')
-        expectationForm.css('display', 'inherit');
-    else
-        expectationForm.css('display', 'none');
-
+        ele.css('display', 'none');
+    if(text)
+        ele.text(text);
 }
 
 function clear(which) {

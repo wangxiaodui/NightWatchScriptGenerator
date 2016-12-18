@@ -32,7 +32,7 @@
     <div class="manual-menu" style="display: none;">
         <div>
             <p class="center">Action</p>
-            <div>
+            <div class="panel">
                 <input placeholder="CssSelector" class="form-control" id="target-css-selector">
                 <select class="selectpicker" id="target-action">
                     <option>SetValue</option>
@@ -42,38 +42,42 @@
             </div>
         </div>
         <div>
-            <p class="center">Expectation <a id="use-expectation">use</a></p>
+            <p class="center">Expectation <a id="use-expectation">Use</a></p>
             <div class="expectation-form" style="display: none">
-                <div>
+                <div class="panel">
                     <input placeholder="CssSelector" class="form-control" id="expect-css-selector">
                     <select class="selectpicker" id="expect-present">
                         <option>present</option>
                         <option>not present</option>
                     </select>
                 </div>
-                <div>
-                    <select class="selectpicker" id="expect-property-have">
-                        <option>have</option>
-                        <option>not have</option>
-                    </select>
-                    <select class="selectpicker" id="expect-property">
-                        <option>attribute</option>
-                        <option>css</option>
-                        <option>value</option>
-                        <option>text</option>
-                    </select>
-                    <a>close</a>
-                    <input placeholder="Value" class="form-control" id="expect-property-value">
+                <div class="panel">
+                    <a id="expect-property-use">Don't use</a> Property
+                    <div id="expect-property-wrap" style="display: inherit">
+                        <select class="selectpicker" id="expect-property-have">
+                            <option>have</option>
+                            <option>not have</option>
+                        </select>
+                        <select class="selectpicker" id="expect-property">
+                            <option>attribute</option>
+                            <option>css</option>
+                            <option>value</option>
+                            <option>text</option>
+                        </select>
+                        <input placeholder="Value" class="form-control" id="expect-property-value">
+                    </div>
                 </div>
-                <div>
-                    <select class="selectpicker" id="expect-equation">
-                        <option>equals</option>
-                        <option>contains</option>
-                        <option>not equals</option>
-                        <option>not contains</option>
-                    </select>
-                    <a>close</a>
-                    <input placeholder="Value" class="form-control" id="expect-equation-value">
+                <div class="panel">
+                    <a id="expect-equation-use">Don't use</a> Equation
+                    <div id="expect-equation-wrap" style="display: inherit">
+                        <select class="selectpicker" id="expect-equation">
+                            <option>equals</option>
+                            <option>contains</option>
+                            <option>not equals</option>
+                            <option>not contains</option>
+                        </select>
+                        <input placeholder="Value" class="form-control" id="expect-equation-value">
+                    </div>
                 </div>
             </div>
         </div>

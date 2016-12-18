@@ -21,6 +21,13 @@ p {
     border-bottom: dashed 1px;
 }
 
+.panel {
+    background-color: #f5f5f5;
+    border: 1px;
+    padding: 5px;
+    margin: 5px;
+}
+
 .manual-menu * {
     margin: 5px;
 }
@@ -42,4 +49,8 @@ a {
     margin-top: 5px;
     min-height:50px;
     max-height: 100px;
+}
+
+input {
+    max-width: 90%;
 }
