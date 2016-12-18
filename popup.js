@@ -105,7 +105,7 @@ window.onload = function() {
 
     $('#expect-property-use').on('click', function() {
         if($(this).text() == 'Don\'t use') {
-            $(this).text('use');
+            $(this).text('Use');
             $('#expect-property-wrap').css('display', 'none');
         } else {
             $(this).text('Don\'t use');
@@ -116,7 +116,7 @@ window.onload = function() {
 
     $('#expect-equation-use').on('click', function() {
         if($(this).text() == 'Don\'t use') {
-            $(this).text('use');
+            $(this).text('Use');
             $('#expect-equation-wrap').css('display', 'none');
         } else {
             $(this).text('Don\'t use');
