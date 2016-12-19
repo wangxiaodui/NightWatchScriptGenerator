@@ -76,20 +76,23 @@ window.onload = function() {
                 command: 'manual-step',
                 data: {
                     isUsingExpectation: isUsingExpectation,
-                    isUsingExpectProperty: $('#expect-property-wrap').css('visibility') == 'inherit',
-                    isUsingExpectEquation: $('#expect-equation-wrap').css('visibility') == 'inherit',
+                    isUsingExpectProperty: $('#expect-property-wrap').css('display') != 'none',
+                    isUsingExpectEquation: $('#expect-equation-wrap').css('display') != 'none',
                     targetCssSelector: targetCssSelector,
                     targetValue: $('#target-value').val(),
                     expectCssSelector: expectCssSelector,
                     expectPropertyValue: expectPropertyValue,
                     expectEquationValue: $('#expect-equation-value').val(),
-                    targetAction: $('#target-action').val(),
-                    expectPresent: $('#expect-present').val(),
-                    expectHave: $('#expect-have').val(),
-                    expectProperty: $('#expect-property').val(),
-                    expectEquation: $('#expect-equation').val()
+                    targetAction: $('#target-action').get(0).selectedIndex,
+                    expectPresent: $('#expect-present').get(0).selectedIndex,
+                    expectPropertyHave: $('#expect-property-have').get(0).selectedIndex,
+                    expectProperty: $('#expect-property').get(0).selectedIndex,
+                    expectEquation: $('#expect-equation').get(0).selectedIndex
                 }
             }
+
+            // $('#note').text('All right, next move').css('display', 'inherit');
+
             chrome.runtime.sendMessage(msg, function(res) {
                 // finished
                 // display result script
@@ -121,6 +124,16 @@ window.onload = function() {
         } else {
             $(this).text('Don\'t use');
             $('#expect-equation-wrap').css('display', 'inherit');
+        }
+    })
+
+    $('#target-action').on('change', function() {
+        if($(this).get(0).selectedIndex == 1) {
+            // select click
+            $('#target-value').css('display', 'none');
+        } else {
+            // select input
+            $('#target-value').css('display', 'inherit');
         }
     })
 }

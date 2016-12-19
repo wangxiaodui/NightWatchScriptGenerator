@@ -151,15 +151,7 @@ function getSwitchWindow() {
     return script;
 }
 
-// function getCssSelectorStr(cssSelector) {
-//     var ele = cssSelector.ele;
-//     var id = cssSelector.id != '' ? '[id=' + cssSelector.id + ']' : '';
-//     var cls = cssSelector.cls != '' ? '[class=' + cssSelector.cls + ']' : '';
-//     var type = cssSelector.type != '' ? '[type=' + cssSelector.type + ']' : '';
-//     var href = cssSelector.href != '' ? '[href=' + cssSelector.href + ']' : '';
-//     var target = cssSelector.target != '' ? '[target=' + cssSelector.target + ']' : '';
-//     return ele + id + cls + type + href + target;
-// }
+
 /**
  * generate action & expect statement
  * check out nightwatch api for more
@@ -200,7 +192,7 @@ function getSwitchWindow() {
  */
 function getManualStep(data) {
     var action;
-    var expect;
+    var expect = '';
     switch (data.targetAction) {
         case 0: // set value
             action = getSetValue(data.targetCssSelector, data.targetValue);
@@ -209,31 +201,31 @@ function getManualStep(data) {
             action = getClick(data.targetCssSelector);
             break;
     }
-    if(data.isUsingExpectation) {
-        switch (data.expectPresent) {
-            case 0:
-                expect = 'browser.expect.element(' +data.expectCssSelector + ').to.be.present.before(1000);\n'
-                break;
-            case 1:
-                expect = 'browser.expect.element(' +data.expectCssSelector + ').not.to.be.present.before(1000);\n'
-                break;
-        }
-        if(data.isUsingExpectProperty) {
-            switch (data.expectProperty) {
-                case 0 || 1: // attribute, css
-                    expect += getHaveProperty(data);
-                    break;
-                default:
-                    break;
-            }
-        }
-        if(data.isUsingExpectEquation) {
-            expect += getEquation(data);
-        }
-
-    } else {
-        expect = '';
-    }
+    // if(data.isUsingExpectation) {
+    //     switch (data.expectPresent) {
+    //         case 0:
+    //             expect = 'browser.expect.element(' +data.expectCssSelector + ').to.be.present.before(1000);\n'
+    //             break;
+    //         case 1:
+    //             expect = 'browser.expect.element(' +data.expectCssSelector + ').not.to.be.present.before(1000);\n'
+    //             break;
+    //     }
+    //     if(data.isUsingExpectProperty) {
+    //         switch (data.expectProperty) {
+    //             case 0 || 1: // attribute, css
+    //                 expect += getHaveProperty(data);
+    //                 break;
+    //             default:
+    //                 break;
+    //         }
+    //     }
+    //     if(data.isUsingExpectEquation) {
+    //         expect += getEquation(data);
+    //     }
+    //
+    // } else {
+    //     expect = '';
+    // }
     return action + expect;
 }
 
@@ -249,7 +241,7 @@ function getHaveProperty(data) {
         default:
             break;
     }
-    return 'browser.expect.element(' + data.expectCssSelector + ').to.' + (data.expectHave == 0 ? 'have' : 'not.have.')
+    return 'browser.expect.element(' + data.expectCssSelector + ').to.' + (data.expectPropertyHave == 0 ? 'have' : 'not.have.')
     + property + ';\n';
 }
 
