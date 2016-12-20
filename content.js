@@ -49,12 +49,16 @@ function genCssSelector(ele, self) {
     //     href: self.attr('href') ? self.attr('href') : '',
     //     target: self.attr('target') == '_blank' ? '_blank' : ''
     // }
-    var id = self.attr('id') != '' ? '[id=' + self.attr('id') + ']' : '';
-    var cls = self.attr('class') != '' ? '[class=' + self.attr('class') + ']' : '';
-    var type = self.attr('type') != '' ? '[type=' + self.attr('type') + ']' : '';
-    var href = self.attr('href') != '' ? '[href=' + self.attr('href') + ']' : '';
-    var target = self.attr('target') != '' ? '[target=' + self.attr('target') + ']' : '';
-    return ele + id + cls + type + href + target;
+    var id = self.attr('id') != undefined ? '[id=\"' + self.attr('id') + '\"]' : '';
+    // var cls = self.attr('class') != undefined ? '[class=' + self.attr('class').replace(' ', ',') + ']' : '';
+    var cls = self.attr('class') != undefined ? '.' + self.attr('class').split(' ')[0] : '';
+    // cls = '.' + cls.split('.')[1];
+    var type = self.attr('type') != undefined ? '[type=\"' + self.attr('type') + '\"]' : '';
+    var href = self.attr('href') != undefined ? '[href=\"' + self.attr('href') + '\"]' : '';
+    var target = self.attr('target') != undefined ? '[target=\"' + self.attr('target') + '\"]' : '';
+    return ele + cls + id + type + href + target;
+    // return ele + id + type + href + target;
+
 }
 
 // function targetBlank(self) {
